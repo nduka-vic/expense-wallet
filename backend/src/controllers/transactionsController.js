@@ -93,8 +93,8 @@ export async function getTransactionSummaryByUserId(req, res) {
             WHERE user_id = ${userId} AND amount < 0
           `;
 
-    console.log(balanceResult);
-    console.log(incomeResult);
+    // console.log(balanceResult);
+    // console.log(incomeResult);
 
     // >> generate response
     res.status(200).json({
