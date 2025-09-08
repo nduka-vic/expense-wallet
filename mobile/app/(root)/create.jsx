@@ -1,4 +1,11 @@
-import { View, Text, Alert, TouchableOpacity, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  Alert,
+  TouchableOpacity,
+  TextInput,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import { useUser } from "@clerk/clerk-expo";
@@ -13,7 +20,7 @@ const CATEGORIES = [
   { id: "transportation", name: "Transportation", icon: "car" },
   { id: "entertainment", name: "Entertainment", icon: "film" },
   { id: "bills", name: "Bills", icon: "receipt" },
-  { id: "income", name: "Income", icon: "cash" },
+  { id: "income", name: "income", icon: "cash" },
   { id: "other", name: "Other", icon: "ellipsis-horizontal" },
 ];
 
@@ -45,11 +52,13 @@ const CreateScreen = () => {
         ? -Math.abs(parseFloat(amount))
         : Math.abs(parseFloat(amount));
 
+      console.log(title, amount, user.id, selectedCategory, formattedAmount);
+
       const response = await fetch(`${API_URL}/transactions`, {
         method: "POST",
-        header: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: user?.id,
+          user_id: user?.id,
           title,
           amount: formattedAmount,
           category: selectedCategory,
@@ -57,11 +66,13 @@ const CreateScreen = () => {
       });
 
       if (!response.ok) {
-        const errorData = response.json();
-        throw new Error(errorData?.error || "Failed to create transaction");
+        const errorData = await response.json();
+        console.log(errorData);
+        throw new Error(errorData?.message || "Failed to create transaction");
       }
 
       Alert.alert("Success", "Transaction created successfully");
+      router.push("/");
     } catch (error) {
       Alert.alert("Error", error.message || "Failed to create transaction");
       console.log("Error creating transaction: ", error);
@@ -213,6 +224,12 @@ const CreateScreen = () => {
           ))}
         </View>
       </View>
+
+      {isLoading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      )}
     </View>
   );
 };
