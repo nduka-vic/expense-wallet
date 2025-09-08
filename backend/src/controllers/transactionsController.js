@@ -24,6 +24,11 @@ export async function postTransaction(req, res) {
     const { title, amount, category, user_id } = req.body;
 
     if (!title || !category || !user_id || amount === undefined) {
+      console.log("title:", title);
+      console.log("category:", category);
+      console.log("user_id:", user_id);
+      console.log("amount:", amount);
+
       return res.status(400).json({ message: "All fields are required" });
     }
 

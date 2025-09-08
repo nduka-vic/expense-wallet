@@ -17,7 +17,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT; // create a PORT reference to .env variable
 
-app.get("/api/health", (res, req) => {
+app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
