@@ -12,7 +12,12 @@ const app = express(); // create an express app
 if (process.env.NODE_ENV === "production") job.start();
 
 // creating a middleware
-app.use(ratelimiter);
+app.use((req, res, next) => {
+  if (req.path === "/api/health") return next();
+  ratelimiter(req, res, next);
+});
+
+// app.use(ratelimiter);
 app.use(express.json());
 
 const PORT = process.env.PORT; // create a PORT reference to .env variable

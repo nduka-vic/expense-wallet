@@ -2,7 +2,9 @@ import ratelimit from "../config/upstach.js";
 
 const ratelimiter = async (req, res, next) => {
   try {
-    const { success } = await ratelimit.limit("my-rate-limit");
+    const key = `${req.ip}:${req.path}`;
+    // const { success } = await ratelimit.limit("my-rate-limit");
+    const { success } = await ratelimit.limit(key);
 
     if (!success) {
       return res
