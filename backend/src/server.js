@@ -20,9 +20,10 @@ app.use((req, res, next) => {
 // app.use(ratelimiter);
 app.use(express.json());
 
-const PORT = process.env.PORT; // create a PORT reference to .env variable
+const PORT = process.env.PORT || 5001; // create a PORT reference to .env variable
 
 app.get("/api/health", (req, res) => {
+  console.log("✅ Health check ping received at", new Date().toISOString());
   res.status(200).json({ status: "ok" });
 });
 
@@ -31,6 +32,6 @@ app.use("/api/transactions", transactionsRoute);
 initDB().then(() => {
   // listen to a port
   app.listen(PORT, () => {
-    console.log("Server is up and running on PORT:", PORT);
+    console.log("Server is up and running on PORT: ", PORT);
   });
 });
