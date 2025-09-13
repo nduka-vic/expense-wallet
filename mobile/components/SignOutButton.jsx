@@ -20,7 +20,14 @@ export const SignOutButton = () => {
     // }
     Alert.alert("Logout", "Are you sure you want to logout?", [
       { text: "Cancel", style: "cancel" },
-      { text: "Logout", style: "destructive", onPress: signOut },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: async () => {
+          await signOut();
+          Linking.openURL(Linking.createURL("/(auth)/sign-in"));
+        },
+      },
     ]);
   };
   return (

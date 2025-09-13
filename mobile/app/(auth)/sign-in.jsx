@@ -15,6 +15,7 @@ export default function Page() {
 
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState("");
 
   // Handle the submission of the sign-in form
@@ -81,14 +82,32 @@ export default function Page() {
           placeholderTextColor="#9A8478"
           onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
         />
-        <TextInput
-          style={styles.input}
-          value={password}
-          placeholder="Enter password"
-          placeholderTextColor="#9A8478"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
+        <View
+          style={[
+            styles.customInput,
+            { flexDirection: "row", alignItems: "center" },
+          ]}
+        >
+          <TextInput
+            style={[{ width: "90%" }, error && styles.errorText]}
+            value={password}
+            placeholder="Enter password"
+            placeholderTextColor="#9A8478"
+            secureTextEntry={hidePassword}
+            onChangeText={(password) => setPassword(password)}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              setHidePassword(!hidePassword);
+            }}
+          >
+            <Ionicons
+              name={hidePassword ? "eye" : "eye-off"}
+              size={20}
+              color={COLORS.textLight}
+            />
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity onPress={onSignInPress} style={styles.button}>
           <Text style={styles.buttonText}>Sign in</Text>
         </TouchableOpacity>

@@ -15,6 +15,7 @@ export default function SignUpScreen() {
 
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [hidePassword, setHidePassword] = useState(true);
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
@@ -146,14 +147,32 @@ export default function SignUpScreen() {
           placeholderTextColor="#9A8478"
           onChangeText={(email) => setEmailAddress(email)}
         />
-        <TextInput
-          style={[styles.input, error && styles.errorText]}
-          value={password}
-          placeholder="Enter password"
-          placeholderTextColor="#9A8478"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
+        <View
+          style={[
+            styles.customInput,
+            { flexDirection: "row", alignItems: "center" },
+          ]}
+        >
+          <TextInput
+            style={[{ width: "90%" }, error && styles.errorText]}
+            value={password}
+            placeholder="Enter password"
+            placeholderTextColor="#9A8478"
+            secureTextEntry={hidePassword}
+            onChangeText={(password) => setPassword(password)}
+          />
+          <TouchableOpacity
+            onPress={() => {
+              setHidePassword(!hidePassword);
+            }}
+          >
+            <Ionicons
+              name={hidePassword ? "eye" : "eye-off"}
+              size={20}
+              color={COLORS.textLight}
+            />
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity onPress={onSignUpPress} style={styles.button}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>

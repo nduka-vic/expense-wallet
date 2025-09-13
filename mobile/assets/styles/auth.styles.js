@@ -33,6 +33,17 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: COLORS.text,
   },
+  customInput: {
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    padding: 15,
+    paddingVertical: 7,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    fontSize: 16,
+    color: COLORS.text,
+  },
   errorInput: {
     borderColor: COLORS.expense,
   },
