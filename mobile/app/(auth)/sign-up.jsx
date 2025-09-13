@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../../constants/colors";
 import { Image } from "expo-image";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import AuthButton from "../../components/AuthButton";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -19,6 +20,7 @@ export default function SignUpScreen() {
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Handle submission of sign-up form
   const onSignUpPress = async () => {
@@ -26,6 +28,7 @@ export default function SignUpScreen() {
 
     // Start sign-up process using email and password provided
     try {
+      setLoading(true);
       await signUp.create({
         emailAddress,
         password,
@@ -55,6 +58,8 @@ export default function SignUpScreen() {
           setError("An error occurred. Please try again");
       }
       console.log(JSON.stringify(err, null, 2));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -63,6 +68,7 @@ export default function SignUpScreen() {
     if (!isLoaded) return;
 
     try {
+      setLoading(true);
       // Use the code the user provided to attempt verification
       const signUpAttempt = await signUp.attemptEmailAddressVerification({
         code,
@@ -82,6 +88,8 @@ export default function SignUpScreen() {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,9 +115,11 @@ export default function SignUpScreen() {
           placeholderTextColor="#9A8478"
           onChangeText={(code) => setCode(code)}
         />
-        <TouchableOpacity onPress={onVerifyPress} style={styles.button}>
-          <Text style={styles.buttonText}>Verify</Text>
-        </TouchableOpacity>
+        <AuthButton
+          btnAction={onVerifyPress}
+          title="Verify"
+          loadingStatus={loading}
+        />
       </View>
     );
   }
@@ -168,14 +178,16 @@ export default function SignUpScreen() {
           >
             <Ionicons
               name={hidePassword ? "eye" : "eye-off"}
-              size={20}
+              size={24}
               color={COLORS.textLight}
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={onSignUpPress} style={styles.button}>
-          <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
+        <AuthButton
+          btnAction={onSignUpPress}
+          title="Sign Up"
+          loadingStatus={loading}
+        />
 
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>Already have an account?</Text>

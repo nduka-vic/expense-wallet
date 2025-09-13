@@ -2,12 +2,19 @@ import React from "react";
 import { useState } from "react";
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Image } from "expo-image";
 import { styles } from "../../assets/styles/auth.styles";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../../constants/colors";
+import AuthButton from "../../components/AuthButton";
 
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -17,6 +24,7 @@ export default function Page() {
   const [password, setPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Handle the submission of the sign-in form
   const onSignInPress = async () => {
@@ -24,6 +32,7 @@ export default function Page() {
 
     // Start the sign-in process using the email and password provided
     try {
+      setLoading(true);
       const signInAttempt = await signIn.create({
         identifier: emailAddress,
         password,
@@ -46,6 +55,8 @@ export default function Page() {
         setError("An error occured, Please try again.");
       }
       console.log(JSON.stringify(err, null, 2));
+    } finally {
+      setLoading(false);
     } // 2. route to home
   };
 
@@ -103,14 +114,23 @@ export default function Page() {
           >
             <Ionicons
               name={hidePassword ? "eye" : "eye-off"}
-              size={20}
+              size={24}
               color={COLORS.textLight}
             />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={onSignInPress} style={styles.button}>
-          <Text style={styles.buttonText}>Sign in</Text>
-        </TouchableOpacity>
+        <AuthButton
+          btnAction={onSignInPress}
+          title="Sign In"
+          loadingStatus={loading}
+        />
+        {/* <TouchableOpacity onPress={onSignInPress} style={styles.button}>
+          {loading ? (
+            <ActivityIndicator size="small" color={COLORS.textLight} />
+          ) : (
+            <Text style={styles.buttonText}>Sign in</Text>
+          )}
+        </TouchableOpacity> */}
         <View style={styles.footerContainer}>
           <Text style={styles.footerText}>Don&apos;t have an account?</Text>
 
