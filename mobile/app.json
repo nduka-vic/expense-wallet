@@ -10,7 +10,8 @@
     "newArchEnabled": true,
     "jsEngine": "jsc",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.victorlight.mobile"
     },
     "android": {
       "adaptiveIcon": {
